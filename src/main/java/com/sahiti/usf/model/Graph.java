@@ -1,7 +1,11 @@
 package com.sahiti.usf.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Graph {
     List<Node> nodes;
@@ -53,6 +57,35 @@ public class Graph {
 
             }
         }
+    }
+
+    public List<Edge> kruskalMST() {
+        List<Edge> mst = new ArrayList<>();
+        Collections.sort(edges, Comparator.comparingDouble(e -> e.distance));
+
+        Map<Node, Node> parents = new HashMap<>();
+        for (Node node : this.nodes) {
+            parents.put(node, node);
+        }
+        for (Edge edge : this.edges) {
+            Node parent1 = find(edge.source, parents);
+            Node parent2 = find(edge.destination, parents);
+            if (parent1 != parent2) {
+                mst.add(edge);
+                parents.put(parent1, parent2);
+            }
+        }
+
+        return mst;
+    }
+
+    private Node find(Node node, Map<Node, Node> parents) {
+        if (parents.get(node) == node) {
+            return node;
+        }
+        Node parent = find(parents.get(node), parents);
+        parents.put(node, parent);
+        return parent;
     }
 
     public List<Node> getNodes() {

@@ -1,7 +1,9 @@
 package com.sahiti.usf;
 
 import java.io.*;
+import java.util.List;
 
+import com.sahiti.usf.model.Edge;
 import com.sahiti.usf.model.Graph;
 import com.sahiti.usf.model.Node;
 
@@ -16,6 +18,8 @@ public class App {
         graph.connectAllNodes();
         System.out.println(graph.getNodes().size());
         System.out.println(graph.getEdges().size());
+        List<Edge> res = graph.kruskalMST();
+        System.out.println(res.size());
     }
 
     public static Graph getNodesFromCSV() {
