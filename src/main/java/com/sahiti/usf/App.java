@@ -3,6 +3,7 @@ package com.sahiti.usf;
 import java.io.*;
 import java.util.List;
 
+import com.sahiti.usf.model.Christofides;
 import com.sahiti.usf.model.Edge;
 import com.sahiti.usf.model.Graph;
 import com.sahiti.usf.model.Node;
@@ -16,10 +17,13 @@ public class App {
     public static void createGraph() {
         Graph graph = getNodesFromCSV();
         graph.connectAllNodes();
-        System.out.println(graph.getNodes().size());
-        System.out.println(graph.getEdges().size());
-        List<Edge> res = graph.kruskalMST();
-        System.out.println(res.size());
+        List<Edge> mst = Christofides.findMST(graph);
+        List<Node> oddDegrNodes = Christofides.findOddDegreeVertices(graph, mst);
+        List<Edge> perfectMatchingEdges = Christofides.getMinimumWeightPerfectMatching(oddDegrNodes);
+        List<Edge> eulerTour = Christofides.mergeGraphs(mst, perfectMatchingEdges);
+        System.out.println(eulerTour.size());
+        List<Node> path = Christofides.findTSPPath(graph, eulerTour);
+        System.out.println(path.size());
     }
 
     public static Graph getNodesFromCSV() {

@@ -18,6 +18,7 @@ public class Graph {
 
     public Graph(List<Node> nodes) {
         this.nodes = nodes;
+        this.edges = new ArrayList<>();
     }
 
     public void addNode(Node node) {
@@ -77,6 +78,29 @@ public class Graph {
         }
 
         return mst;
+    }
+
+    public List<Edge> getMinimumWeightPerfectMatching() {
+        List<Edge> result = new ArrayList<>();
+        List<Node> nodes = new ArrayList<>(this.nodes);
+        while (!nodes.isEmpty()) {
+            Node node = nodes.remove(0);
+            double minWeight = Double.MAX_VALUE;
+            Node minNode = null;
+            List<Node> backupNode = this.nodes;
+            for (Node otherNode : nodes) {
+                double weight = calculateDistance(node, otherNode);
+                if (weight < minWeight) {
+                    minWeight = weight;
+                    minNode = otherNode;
+                }
+                result.add(new Edge(node, minNode, minWeight));
+                backupNode.remove(minNode);
+            }
+            this.nodes = backupNode;
+            return result;
+        }
+        return result;
     }
 
     private Node find(Node node, Map<Node, Node> parents) {
