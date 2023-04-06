@@ -2,9 +2,11 @@ package com.sahiti.usf.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Christofides {
 
@@ -36,10 +38,49 @@ public class Christofides {
         return subgraph.getMinimumWeightPerfectMatching();
     }
 
-    public static List<Edge> mergeGraphs(List<Edge> list1, List<Edge> list2) {
-        List<Edge> result = new ArrayList<>(list1);
-        result.addAll(list2);
-        return result;
+    public static List<Node> eulerTour(Graph graph, List<Edge> mst, List<Edge> perfEdges) {
+        List<Node> eulerTour = new ArrayList<>();
+        List<Edge> combinEdges = new ArrayList<>(mst);
+        combinEdges.addAll(perfEdges);
+        Map<Node, List<Node>> adjacenyMatrix = graph.adjacencyMatrix();
+        Set<Node> visited = new HashSet<>();
+        Node startNode = combinEdges.get(0).source;
+        dfs(startNode, eulerTour, combinEdges, visited, adjacenyMatrix);
+        return eulerTour;
+    }
+
+    public static List<Node> generateTSPtour(List<Node> eulerTour) {
+        List<Node> hamiltonList = new ArrayList<>();
+        Set<Node> visited = new HashSet<>();
+        for (Node node : eulerTour) {
+            if (!visited.contains(node)) {
+                visited.add(node);
+                hamiltonList.add(node);
+            }
+        }
+        return hamiltonList;
+    }
+
+    private static void dfs(Node node, List<Node> eulerTour, List<Edge> edges, Set<Node> visited,
+            Map<Node, List<Node>> adjacenyMatrix) {
+
+        visited.add(node);
+        for (Node v : adjacenyMatrix.get(node)) {
+            if (!visited.contains(v)) {
+                eulerTour.add(node);
+                eulerTour.add(v);
+
+                Edge matchedEdge = edges.get(0);
+                for (Edge edge : edges) {
+                    if (edge.source.crimeId == node.crimeId && edge.destination.crimeId == v.crimeId) {
+                        matchedEdge = edge;
+                        break;
+                    }
+                }
+                edges.remove(matchedEdge);
+                dfs(v, eulerTour, edges, visited, adjacenyMatrix);
+            }
+        }
     }
     // FileWriter myObj = new FileWriter("filename.txt");
     // myObj.write("start size" + " " + backup.size() + "\n");

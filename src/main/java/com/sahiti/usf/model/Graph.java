@@ -103,6 +103,19 @@ public class Graph {
         return result;
     }
 
+    public Map<Node, List<Node>> adjacencyMatrix() {
+        Map<Node, List<Node>> adjacencyMatrix = new HashMap<>();
+        for (Node node : this.nodes) {
+            adjacencyMatrix.put(node, new ArrayList<>());
+        }
+        for (Edge edge : this.edges) {
+            adjacencyMatrix.get(edge.source).add(edge.destination);
+            adjacencyMatrix.get(edge.destination).add(edge.source);
+        }
+        return adjacencyMatrix;
+
+    }
+
     private Node find(Node node, Map<Node, Node> parents) {
         if (parents.get(node) == node) {
             return node;

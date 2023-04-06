@@ -18,12 +18,15 @@ public class App {
         Graph graph = getNodesFromCSV();
         graph.connectAllNodes();
         List<Edge> mst = Christofides.findMST(graph);
+        System.out.println("MST :" + mst.size());
         List<Node> oddDegrNodes = Christofides.findOddDegreeVertices(graph, mst);
         List<Edge> perfectMatchingEdges = Christofides.getMinimumWeightPerfectMatching(oddDegrNodes);
-        List<Edge> eulerTour = Christofides.mergeGraphs(mst, perfectMatchingEdges);
-        System.out.println(eulerTour.size());
-        List<Node> path = Christofides.findTSPPath(graph, eulerTour);
-        System.out.println(path.size());
+        System.out.println("PFM :" + perfectMatchingEdges.size());
+        List<Node> eulerTour = Christofides.eulerTour(graph, mst, perfectMatchingEdges);
+        System.out.println("EUL :" + eulerTour.size());
+        List<Node> hamiltonList = Christofides.generateTSPtour(eulerTour);
+        System.out.println("TSP :" + hamiltonList.size());
+        
     }
 
     public static Graph getNodesFromCSV() {
