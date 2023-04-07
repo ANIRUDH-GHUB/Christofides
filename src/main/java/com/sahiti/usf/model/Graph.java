@@ -1,5 +1,6 @@
 package com.sahiti.usf.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Graph {
+public class Graph implements Serializable {
     List<Node> nodes;
     List<Edge> edges;
 
@@ -31,7 +32,7 @@ public class Graph {
         this.edges.add(edge);
     }
 
-    private double calculateDistance(Node source, Node destination) {
+    public static double calculateDistance(Node source, Node destination) {
         int R = 6371; // Earth's radius in km
         double lat1 = Math.toRadians(source.getLatitude());
         double lat2 = Math.toRadians(destination.getLatitude());

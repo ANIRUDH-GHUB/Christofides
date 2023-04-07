@@ -24,8 +24,14 @@ public class App {
         System.out.println("PFM :" + perfectMatchingEdges.size());
         List<Node> eulerTour = Christofides.eulerTour(graph, mst, perfectMatchingEdges);
         System.out.println("EUL :" + eulerTour.size());
-        List<Node> hamiltonList = Christofides.generateTSPtour(eulerTour);
-        System.out.println("TSP :" + hamiltonList.size());
+        List<Node> hamiltonCycle = Christofides.generateTSPtour(eulerTour);
+        System.out.println("TSP :" + hamiltonCycle.size());
+        System.out.println("HTL :" + Christofides.calculateTourLength(hamiltonCycle));
+        List<Node> randomTour = Christofides.randomSwapOptimise(hamiltonCycle, 10);
+        System.out.println("TSP :" + randomTour.size());
+        List<Node> twoOptTour = Christofides.twoOpt(randomTour);
+        System.out.println("TSP :" + twoOptTour.size());
+        System.out.println("OTL :" + Christofides.calculateTourLength(twoOptTour));
         
     }
 
@@ -34,9 +40,11 @@ public class App {
         String line = "";
         String splitBy = ",";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("2023-01-metropolitan-street.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader("2023-01-metropolitan-street-backup.csv"));
             reader.readLine();
-            while ((line = reader.readLine()) != null) {
+            int count = 0;
+            while ((line = reader.readLine()) != null && count < 2000) {
+                count += 1;
                 String[] node = line.split(splitBy);
                 // System.out.println(node.length);
                 if(node.length>0 && !(node[0].isEmpty() || node[4].isEmpty() || node[5].isEmpty())){

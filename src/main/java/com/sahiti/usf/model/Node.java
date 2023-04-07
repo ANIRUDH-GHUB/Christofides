@@ -1,6 +1,7 @@
 package com.sahiti.usf.model;
+import java.io.*;
 
-public class Node {
+public class Node implements Serializable {
     String crimeId;
     double longitude;
     double latitude;
